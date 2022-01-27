@@ -50,6 +50,10 @@ def register_blueprints(app):
     auth_module = import_module('api.auth.routes')
     app.register_blueprint(auth_module.blueprint)
 
+    # Registering Notifier module
+    notifier_module = import_module('api.notifier.routes')
+    app.register_blueprint(notifier_module.blueprint)
+
 
 ####################
 ## DATABASE
@@ -72,10 +76,12 @@ def init_db(app):
 
     @app.before_first_request
     def initialize_database():
+        logging.debug('🌟 Init database')
         db_api.create_all()
 
     @app.teardown_request
     def shutdown_session(exception=None):
+        logging.debug('💥 Killing session')
         db_api.session.remove()
 
 ####################
