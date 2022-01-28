@@ -47,8 +47,8 @@ def register_blueprints(app):
     logging.info('⌛ Registering blueprints')
 
     # Registering Auth module
-    auth_module = import_module('api.auth.routes')
-    app.register_blueprint(auth_module.blueprint)
+    #auth_module = import_module('api.auth.routes')
+    #app.register_blueprint(auth_module.blueprint)
 
     # Registering Notifier module
     notifier_module = import_module('api.notifier.routes')
