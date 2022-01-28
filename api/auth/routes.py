@@ -32,7 +32,7 @@ def login():
 
 
 ##########################
-# TEST
+# INIT
 @blueprint.route('/init')
 def init():
     logging.info('🌟 INITIALIZATION DATA')

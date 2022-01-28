@@ -52,7 +52,7 @@ def register_blueprints(app):
 
     # Registering Notifier module
     notifier_module = import_module('api.notifier.routes')
-    app.register_blueprint(notifier_module.blueprint)
+    app.register_blueprint(notifier_module.notifier_blueprint)
 
 
 ####################

@@ -1,7 +1,8 @@
 import logging
 from flask import jsonify, request
 from flask_jwt_extended import jwt_required
-from telegram import Contact
+#from telegram import Contact
+from api.notifier.models import Contact
 
 from api import db_api
 from api.notifier import notifier_blueprint
@@ -25,6 +26,16 @@ def add_contact():
 
     return jsonify({"msg": "Contact created successfully"}), 200
 
+@notifier_blueprint.route('/send_notification', methods=["POST"])
+@jwt_required()
+def sent_notification():
+    logging.debug('Sending notification')
+
+    message = request.json.get("message", None)
+    logging.debug(message)
+
+    return jsonify({"msg": 'Message sent !'}), 200
+    
 
 @notifier_blueprint.route('/create_poll')
 def create_poll():
