@@ -14,6 +14,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 db_api = SQLAlchemy()
 #login_manager = LoginManager()
 jwt = None
+telegram_bot = None
 
 ####################
 ## APP

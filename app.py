@@ -14,5 +14,6 @@ load_dotenv(dotenv_path)
 
 KEY = os.environ.get("FLASK_KEY")
 JWT_KEY = os.environ.get("JWT_KEY")
+TELEGRAM_KEY = os.environ.get("TOKEN")
 
 app_api = init_api(KEY, JWT_KEY)

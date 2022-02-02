@@ -7,6 +7,7 @@ from api import db_api
 from api.notifier import notifier_blueprint
 from api.notifier.models import Contact, User
 from api.notifier.login_utils import verify_pass
+from api.notifier.telegram_utils import send_telegram_message
 
 ##########
 # LOGIN
@@ -28,6 +29,21 @@ def login():
         logging.error('🚨 Login error for : ' + username)
         return jsonify({"msg": "Error during the login"}), 401
 
+## Create user
+@notifier_blueprint.route('/create_user', methods=["POST"])
+@jwt_required()
+def create_user():
+    logging.info('👤 Create user')
+
+    user = request.json.get("username", None)
+    passwd = request.json.get("password", None)
+
+    user = User(username=user, password=passwd)
+    db_api.session.add(user)
+    db_api.session.commit()
+
+    return jsonify({"msg": "👤 User created"}), 200
+
 
 ##########################
 # INIT
@@ -38,43 +54,42 @@ def init():
     db_api.session.add(user)
     db_api.session.commit()
 
-    return jsonify({"msg": "Init data successful"}), 200
+    return jsonify({"msg": "🌟 Init data successful"}), 200
 
 ##########
 # NOTIFIER
+
+## Test
 @notifier_blueprint.route('/test')
 @jwt_required()
 def test():
     logging.debug('🚀 Message received captain !')
     return jsonify({"msg": '🚀 Message received captain !'}), 200
 
+## Add contact
 @notifier_blueprint.route('/add_contact', methods=["POST"])
 @jwt_required()
 def add_contact():
-    logging.debug('Creating new contact')
+    logging.debug('📇 Creating new contact')
 
     id_telegram = request.json.get("telegram_id", None)
     contact = Contact(telegram_id=id_telegram)
 
-    db_api.sesion.add(contact)
+    db_api.session.add(contact)
     db_api.session.commit()
 
-    return jsonify({"msg": "Contact created successfully"}), 200
+    return jsonify({"msg": "📇 Contact created successfully"}), 200
 
+## Send notification to all contacts
 @notifier_blueprint.route('/send_notification', methods=["POST"])
 @jwt_required()
 def sent_notification():
-    logging.debug('Sending notification')
+    logging.debug('📨 Sending notification')
 
     message = request.json.get("message", None)
-    logging.debug(message)
 
-    return jsonify({"msg": 'Message sent !'}), 200
-    
+    contacts = Contact.query.all()
+    for contact in contacts:
+        send_telegram_message(contact, message)
 
-@notifier_blueprint.route('/create_poll')
-def create_poll():
-    logging.debug('🗳️ Creating poll')
-    return jsonify({"msg": '🗳️ Creating poll'}), 200
-
-    
+    return jsonify({"msg": '📨 Message sent !'}), 200
