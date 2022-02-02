@@ -59,13 +59,6 @@ def init():
 ##########
 # NOTIFIER
 
-## Test
-@notifier_blueprint.route('/test')
-@jwt_required()
-def test():
-    logging.debug('🚀 Message received captain !')
-    return jsonify({"msg": '🚀 Message received captain !'}), 200
-
 ## Add contact
 @notifier_blueprint.route('/add_contact', methods=["POST"])
 @jwt_required()
@@ -79,6 +72,36 @@ def add_contact():
     db_api.session.commit()
 
     return jsonify({"msg": "📇 Contact created successfully"}), 200
+
+## Get all contacts
+@notifier_blueprint.route('/contacts', methods=["GET"])
+@jwt_required()
+def get_contacts():
+    logging.debug('📇 Get list contacts')
+
+    contacts = Contact.query.all()
+
+    list_contacts = []
+    for contact in contacts:
+        list_contacts.append({
+            'id': contact.id, 
+            'telegram_id': contact.telegram_id})
+
+    return jsonify({"msg": "Success", "list_contacts": list_contacts}), 200
+
+## Delete contact
+@notifier_blueprint.route('/delete_contact', methods=["POST"])
+@jwt_required()
+def delete_contact():
+    logging.debug('📇 Delete contact')
+
+    id_contact = request.json.get("id", None)
+
+    Contact.query.filter_by(id=id_contact).delete()
+    db_api.session.commit()
+
+    return jsonify({"msg": "Success"}), 200
+
 
 ## Send notification to all contacts
 @notifier_blueprint.route('/send_notification', methods=["POST"])

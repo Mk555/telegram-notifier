@@ -16,6 +16,13 @@ curl -X POST http://localhost:5000/api/add_contact -H 'Content-Type: application
 ## Send a notification
 curl -X POST http://localhost:5000/api/send_notification -H 'Content-Type: application/json' -H "Authorization: Bearer $token"   -d '{"message":"<h1>📨 IT WORKS 📨</h1>"}'
 
+## List users
+curl http://localhost:5000/api/contacts  -H "Authorization: Bearer $token"
+
+## Delete user by id
+curl -X POST http://localhost:5000/api/delete_contact -H 'Content-Type: application/json' -H "Authorization: Bearer $token"   -d '{"id":"2"}'
+
+
 # TELEGRAM EXAMPLE
 . .env
 curl -X POST \
