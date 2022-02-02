@@ -56,8 +56,8 @@ def init():
 
     return jsonify({"msg": "🌟 Init data successful"}), 200
 
-##########
-# NOTIFIER
+##############
+# CONTACT MGMT
 
 ## Add contact
 @notifier_blueprint.route('/add_contact', methods=["POST"])
@@ -102,6 +102,9 @@ def delete_contact():
 
     return jsonify({"msg": "Success"}), 200
 
+
+##########
+# NOTIFIER
 
 ## Send notification to all contacts
 @notifier_blueprint.route('/send_notification', methods=["POST"])
